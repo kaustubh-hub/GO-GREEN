@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌍📊Carbon Footprint Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"> <!-- Premium Google Fonts -->
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Roboto', sans-serif; /* Modern, clean font */
+    }
+
+    body {
+        overflow-x: hidden;
+        background: #000;
+        color: #fff;
+    }
+
+    /* Background image - Enhanced for premium feel */
+    .bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -3;
+    }
+
+    /* Fallback for low-end devices or small screens */
+    @media (max-width: 768px) or (prefers-reduced-motion: reduce) {
+        .bg-image { 
+            background-attachment: scroll;
+        }
+    }
+
+    /* Gradient overlay - More sophisticated */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5), rgba(0,0,0,0.8));
+        z-index: -2;
+    }
+
+    /* NAVBAR - Premium styling with glassmorphism effect */
+    nav {
+        width: 100%;
+        padding: 20px 50px;
+        display: flex;
+        justify-content: space-between; /* Changed to space-between for left/right alignment */
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px); /* Subtle blur for premium look */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        position: fixed;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 50px;
+    }
+
+    .nav-links a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.1rem;
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    .nav-links a:hover {
+        color: #ffcc00;
+        transform: translateY(-2px);
+        text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 50%;
+        background: linear-gradient(90deg, #ffcc00, #ffb400);
+        transition: all 0.4s ease;
+        transform: translateX(-50%);
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    /* PROFILE LOGIN IN NAV - Simplified to link and logged-in display */
+    .profile-login {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .profile-login a, .profile-login button {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .profile-login a:hover, .profile-login button:hover {
+        background: rgba(255, 204, 0, 0.2);
+        color: #ffcc00;
+    }
+
+    .logged-in-nav {
+        display: none;
+        text-align: center;
+    }
+
+    .logged-in-nav p {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+    }
+
+    /* HERO SECTION - Adapted for Calculator */
+    .hero {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 20px;
+        animation: fadeInUp 1.5s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero h1 {
+        font-family: 'Playfair Display', serif; /* Elegant serif font */
+        font-size: 4rem;
+        color: #fff;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.7), 0 0 30px rgba(255, 204, 0, 0.3);
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+    }
+
+    .hero p {
+        color: #e0e0e0;
+        font-size: 1.4rem;
+        max-width: 700px;
+        line-height: 1.6;
+        font-weight: 300;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    /* Calculator Form - Premium styling */
+    .calculator {
+        width: 100%;
+        max-width: 600px;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+        transition: all 0.5s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 40px;
+        margin: 50px auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .calculator::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,204,0,0.1), transparent);
+        transition: left 0.6s;
+    }
+
+    .calculator:hover::before {
+        left: 100%;
+    }
+
+    .calculator:hover {
+        transform: translateY(-15px) scale(1.05);
+        box-shadow: 0 20px 50px rgba(255,215,0,0.4), 0 0 30px rgba(255,215,0,0.2);
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(255,204,0,0.3);
+    }
+
+    .calculator h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: #ffcc00;
+    }
+
+    .calculator p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #ddd;
+        margin-bottom: 30px;
+    }
+
+    .calculator form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .calculator input {
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(255,255,255,0.2);
+        color: #fff;
+        transition: 0.3s;
+    }
+
+    .calculator input:focus {
+        outline: none;
+        box-shadow: 0 0 10px rgba(255,140,0,0.5);
+        transform: scale(1.02);
+    }
+
+    .calculator input::placeholder {
+        color: #ccc;
+    }
+
+    .calculator button {
+        padding: 18px 40px;
+        background: linear-gradient(135deg, #ffb400, #ff7f00, #ffcc00);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        box-shadow: 0 8px 25px rgba(255,140,0,0.6);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .calculator button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .calculator button:hover::before {
+        left: 100%;
+    }
+
+    .calculator button:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 35px rgba(255,140,0,0.8);
+    }
+
+    #result {
+        margin-top: 20px;
+        font-size: 1.5rem;
+        color: #ffcc00;
+        font-weight: bold;
+        opacity: 0;
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+
+    /* Breakdown section - Premium */
+    .breakdown {
+        width: 100%;
+        max-width: 600px;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+        transition: all 0.5s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 30px;
+        margin: 50px auto;
+        display: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .breakdown::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,204,0,0.1), transparent);
+        transition: left 0.6s;
+    }
+
+    .breakdown:hover::before {
+        left: 100%;
+    }
+
+    .breakdown:hover {
+        transform: translateY(-15px) scale(1.05);
+        box-shadow: 0 20px 50px rgba(255,215,0,0.4), 0 0 30px rgba(255,215,0,0.2);
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(255,204,0,0.3);
+    }
+
+    .breakdown h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        color: #ffcc00;
+    }
+
+    .bar-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .bar {
+        width: 20%;
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        transition: 0.3s;
+    }
+
+    .bar:hover {
+        transform: scale(1.1);
+    }
+
+    .bar-fill {
+        height: 100%;
+        background: linear-gradient(45deg, #ffb400, #ff7f00);
+        width: 0%;
+        transition: width 1s ease;
+    }
+
+    .bar-label {
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    /* Tips section - Premium */
+    .tips {
+        width: 100%;
+        max-width: 600px;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+        transition: all 0.5s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 30px;
+        margin: 50px auto;
+        display: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tips::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,204,0,0.1), transparent);
+        transition: left 0.6s;
+    }
+
+    .tips:hover::before {
+        left: 100%;
+    }
+
+    .tips:hover {
+        transform: translateY(-15px) scale(1.05);
+        box-shadow: 0 20px 50px rgba(255,215,0,0.4), 0 0 30px rgba(255,215,0,0.2);
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(255,204,0,0.3);
+    }
+
+    .tips h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        color: #ffcc00;
+    }
+
+    .tips ul {
+        list-style: none;
+        text-align: left;
+    }
+
+    .tips li {
+        margin-bottom: 10px;
+        color: #ccc;
+        transition: 0.3s;
+    }
+
+    .tips li:hover {
+        color: #ffcc00;
+        transform: translateX(10px);
+    }
+
+    /* Responsive Enhancements */
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 3rem;
+        }
+        .calculator, .breakdown, .tips {
+            padding: 20px;
+        }
+        .bar-container {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bar {
+            width: 100%;
+        }
+        nav {
+            padding: 15px 20px;
+            flex-direction: column; /* Stack nav on mobile */
+            gap: 10px;
+        }
+        .nav-links {
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .profile-login {
+            margin-top: 10px;
+        }
+    }
+
+</style>
+</head>
+<body>
+
+<video autoplay muted loop playsinline class="bg-video">
+    <source src="MICRO bg.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<nav>
+    <div class="nav-links">
+        <a href="Home.html">Home</a>
+        <a href="CAL.html">Carbon Footprint Tracker</a>
+        <a href="tips.html">Tips to Go Green</a>
+        
+        <a href="emission-stats.html">Emission Stats</a>
+        <a href="sdg.html">SDG</a>
+        <a href="about us.html">About Us</a>
+    </div>
+    <div class="profile-login">
+        <a href="login.html">Login</a> <!-- Link to login page -->
+        <div class="logged-in-nav" id="profileInfo">
+            <p>Welcome, <span id="userName">User</span>!</p>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>Carbon Footprint Calculator</h1>
+    <p>Enter your monthly usage to estimate your carbon footprint. This helps you understand your impact and take steps to reduce it.</p>
+</div>
+
+<!-- CALCULATOR -->
+<div class="calculator">
+    <h2>Calculate Your Footprint</h2>
+    <p>Fill in the details below to get an estimate.</p>
+    <form id="footprintForm">
+        <input type="number" id="electricity" placeholder="Monthly electricity usage (kWh)" required>
+        <input type="number" id="gas" placeholder="Monthly gas usage (therms)" required>
+        <input type="number" id="miles" placeholder="Weekly driving miles" required>
+        <button type="submit">Calculate My Footprint</button>
+    </form>
+    <div id="result"></div>
+</div>
+
+<!-- BREAKDOWN -->
+<div class="breakdown" id="breakdown">
+    <h3>Footprint Breakdown</h3>
+    <div class="bar-container">
+        <div class="bar">
+            <div class="bar-fill" id="electricityBar"></div>
+            <div class="bar-label">Electricity</div>
+        </div>
+        <div class="bar">
+            <div class="bar-fill" id="gasBar"></div>
+            <div class="bar-label">Gas</div>
+        </div>
+        <div class="bar">
+            <div class="bar-fill" id="milesBar"></div>
+            <div class="bar-label">Driving</div>
+        </div>
+    </div>
+</div>
+
+<!-- TIPS -->
+<div class="tips" id="tips">
+    <h3>Personalized Tips to Reduce Your Footprint</h3>
+    <ul id="tipList"></ul>
+</div>
+
+<script src="calculator.js"></script>
+
+    <script src="user.js"></script>
+
+</body>
+</html>

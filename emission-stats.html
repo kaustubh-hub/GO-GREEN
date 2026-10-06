@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊Emission Stats</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet"> <!-- Premium Google Fonts -->
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            /* Modern, clean font */
+        }
+
+        body {
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3;
+        }
+
+
+
+        /* Fallback for low-end devices or small screens */
+        @media (max-width: 768px) or (prefers-reduced-motion: reduce) {
+            .bg-image {
+                background-attachment: scroll;
+            }
+        }
+
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3;
+        }
+
+
+        /* Gradient overlay - More sophisticated */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+            z-index: -2;
+        }
+
+        /* NAVBAR - Premium styling with glassmorphism effect */
+        nav {
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            /* Changed to space-between for left/right alignment */
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            /* Subtle blur for premium look */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 50px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ffcc00;
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(90deg, #ffcc00, #ffb400);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* PROFILE LOGIN IN NAV - Simplified to link and logged-in display */
+        .profile-login {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-login a,
+        .profile-login button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-login a:hover,
+        .profile-login button:hover {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+        }
+
+        .logged-in-nav {
+            display: none;
+            text-align: center;
+        }
+
+        .logged-in-nav p {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* HERO SECTION - Adapted for Emission Stats */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            /* Elegant serif font */
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 204, 0, 0.3);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            color: #e0e0e0;
+            font-size: 1.4rem;
+            max-width: 700px;
+            line-height: 1.6;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* STATS CONTAINER - Premium styling */
+        .stats-container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            color: white;
+            text-align: center;
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .stats-container:hover::before {
+            left: 100%;
+        }
+
+        .stats-container:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 204, 0, 0.3);
+        }
+
+        .stats-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+
+        .stats-container p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 30px;
+        }
+
+        .counter {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffcc00;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .chart h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+
+        .bar-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .bar {
+            width: 18%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: 0.3s;
+            cursor: pointer;
+            animation: pulse 3s infinite;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .bar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ffb400, #ff7f00);
+            width: 0%;
+            transition: width 2s ease;
+        }
+
+        .bar-label {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .bar:hover .tooltip {
+            opacity: 1;
+        }
+
+        .timeline h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+
+        .timeline-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .timeline-fill {
+            height: 20px;
+            background: linear-gradient(45deg, #ffb400, #ff7f00);
+            width: 0%;
+            transition: width 2s ease;
+        }
+
+        .quiz h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .quiz-option.correct {
+            background: #4CAF50;
+        }
+
+        .quiz-option.wrong {
+            background: #f44336;
+        }
+
+        .trivia h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+
+        .fact-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            overflow: hidden;
+        }
+
+        .fact-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .fact-card h3 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .fact-card p {
+            color: #ccc;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .fact-card.expanded p {
+            max-height: 200px;
+        }
+
+        /* Footer - Premium */
+        footer {
+            width: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            color: #ccc;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Enhancements */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .stats-container {
+                padding: 20px;
+            }
+
+            .bar-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .bar {
+                width: 100%;
+            }
+
+            nav {
+                padding: 15px 20px;
+                flex-direction: column;
+                /* Stack nav on mobile */
+                gap: 10px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .profile-login {
+                margin-top: 10px;
+            }
+        }
+
+
+        .quiz-result {
+            margin-top: 18px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 204, 0, 0.35);
+            color: #fff;
+            font-size: 1.05rem;
+            text-align: center;
+            min-height: 0;
+        }
+
+        .quiz-result:empty {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="MICRO bg.mp4" type="video/mp4">
+    </video>
+
+
+    <div class="overlay"></div>
+
+    <nav>
+        <div class="nav-links">
+            <a href="Home.html">Home</a>
+            <a href="CAL.html">Carbon Footprint Tracker</a>
+            <a href="tips.html">Tips to Go Green</a>
+
+            <a href="emission-stats.html">Emission Stats</a>
+            <a href="sdg.html">SDG</a>
+            <a href="about us.html">About Us</a>
+        </div>
+        <div class="profile-login">
+            <a href="login.html">Login</a> <!-- Link to login page -->
+            <div class="logged-in-nav" id="profileInfo">
+                <p>Welcome, <span id="userName">User</span>!</p>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Emission Stats</h1>
+
+    </div>
+
+    <!-- STATS CONTAINER -->
+    <div class="stats-container">
+        <div class="counter" id="co2Counter">422 ppm</div>
+        <div class="chart">
+            <h3>Top CO₂ Emitters by Sector (2023) - Click for Details</h3>
+            <div class="bar-container">
+                <a href="energy.html" class="bar">
+                    <div class="bar-fill" style="width: 73%;"></div>
+                    <div class="tooltip">Energy: 73% of global emissions - Click to explore</div>
+                    <div class="bar-label">Energy</div>
+                </a>
+                <a href="agriculture.html" class="bar">
+                    <div class="bar-fill" style="width: 18%;"></div>
+                    <div class="tooltip">Agriculture: 18% from farming - Click to explore</div>
+                    <div class="bar-label">Agriculture</div>
+                </a>
+                <a href="industry.html" class="bar">
+                    <div class="bar-fill" style="width: 5%;"></div>
+                    <div class="tooltip">Industry: 5% from manufacturing - Click to explore</div>
+                    <div class="bar-label">Industry</div>
+                </a>
+                <a href="waste.html" class="bar">
+                    <div class="bar-fill" style="width: 3%;"></div>
+                    <div class="tooltip">Waste: 3% from landfills - Click to explore</div>
+                    <div class="bar-label">Waste</div>
+                </a>
+                <a href="other.html" class="bar">
+                    <div class="bar-fill" style="width: 1%;"></div>
+                    <div class="tooltip">Other: 1% miscellaneous - Click to explore</div>
+                    <div class="bar-label">Other</div>
+                </a>
+            </div>
+        </div>
+        <div class="timeline">
+            <h3>Global Emissions Timeline (1950-2023)</h3>
+            <div class="timeline-bar">
+                <div class="timeline-fill" style="width: 100%;"></div>
+            </div>
+            <p>Emissions have risen 500% since 1950 due to industrialization.</p>
+        </div>
+        <div class="quiz">
+            <h3>Quick Emission Quiz - Click the Correct Answer!</h3>
+            <div class="quiz-option" data-correct="true">What sector causes the most CO₂? Energy</div>
+            <div class="quiz-option">What sector causes the most CO₂? Waste</div>
+            <div class="quiz-option">What sector causes the most CO₂? Agriculture</div>
+        </div>
+        <div class="trivia">
+            <h3>Did You Know?</h3>
+            <div class="fact-card" id="fact1">
+                <h3>📊 Global CO₂ Levels</h3>
+                <p>Atmospheric CO₂ reached 420 ppm in 2023, up from 280 ppm pre-industrial. This drives climate change.
+                </p>
+            </div>
+            <div class="fact-card" id="fact2">
+                <h3>🌍 Per Capita Emissions</h3>
+                <p>The US averages 15 tons per person annually, while India is 2 tons. Global average: 4.8 tons.</p>
+            </div>
+            <div class="fact-card" id="fact3">
+                <h3>🔥 Fossil Fuels</h3>
+                <p>Coal, oil, and gas account for 75% of emissions. Transitioning
+            </div>
+        </div>
+
+        <div id="quizResult" class="quiz-result" aria-live="polite"></div>
+
+        <script>
+            document.querySelectorAll('.quiz-option').forEach(function (option) {
+                option.addEventListener('click', function () {
+                    const options = document.querySelectorAll('.quiz-option');
+                    options.forEach(function (item) {
+                        item.classList.remove('correct', 'wrong');
+                    });
+
+                    const result = document.getElementById('quizResult');
+                    const isCorrect = option.dataset.correct === 'true';
+
+                    if (isCorrect) {
+                        option.classList.add('correct');
+                        result.innerHTML = '✓ Correct! <strong>Correct Answer: Energy</strong>';
+                    } else {
+                        option.classList.add('wrong');
+                        options.forEach(function (item) {
+                            if (item.dataset.correct === 'true') item.classList.add('correct');
+                        });
+                        result.innerHTML = '✗ Incorrect. <strong>Correct Answer: Energy</strong>';
+                    }
+                });
+            });
+        </script>
+
+        <script src="user.js"></script>
+</body>
+
+</html>

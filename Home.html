@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☘️Go Green</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet"> <!-- Premium Google Fonts -->
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            /* Modern, clean font */
+        }
+
+        body {
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3;
+        }
+
+        /* Background image - Enhanced for premium feel */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            filter: brightness(0.8) contrast(1.1);
+            /* Subtle enhancement */
+            z-index: -3;
+        }
+
+        /* Fallback for low-end devices or small screens */
+        @media (max-width: 768px) or (prefers-reduced-motion: reduce) {
+            .bg-image {
+                background-attachment: scroll;
+            }
+        }
+
+        /* Gradient overlay - More sophisticated */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+            z-index: -2;
+        }
+
+        /* NAVBAR - Premium styling with glassmorphism effect */
+        nav {
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            /* Changed to space-between for left/right alignment */
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            /* Subtle blur for premium look */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 50px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ffcc00;
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(90deg, #ffcc00, #ffb400);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* PROFILE LOGIN IN NAV - Simplified to link and logged-in display */
+        .profile-login {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-login a,
+        .profile-login button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-login a:hover,
+        .profile-login button:hover {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+        }
+
+        .logged-in-nav {
+            display: none;
+            text-align: center;
+        }
+
+        .logged-in-nav p {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* HERO SECTION - More premium with animations */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            /* Elegant serif font */
+            font-size: 5rem;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 204, 0, 0.3);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            color: #e0e0e0;
+            font-size: 1.4rem;
+            max-width: 700px;
+            line-height: 1.6;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn {
+            margin-top: 40px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #ffb400, #ff7f00, #ffcc00);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 140, 0, 0.8);
+        }
+
+        /* FLOATING ECO ICONS - Enhanced animation */
+        .floating {
+            position: absolute;
+            bottom: -50px;
+            width: 50px;
+            animation: floatUp 15s linear infinite;
+            opacity: 0.9;
+            will-change: transform;
+            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.3));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(-50vh) rotate(180deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0.5;
+            }
+        }
+
+        /* INFO CARDS SECTION - Premium design */
+        .cards {
+            margin-top: 100px;
+            padding: 60px 10%;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 320px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            color: white;
+            text-align: center;
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            will-change: transform;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 204, 0, 0.3);
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+            color: #ffcc00;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        /* COUNTERS - Enhanced */
+        .stats {
+            margin-top: 100px;
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+
+        .stats h2 {
+            color: #fff;
+            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .counter {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ffcc00;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* TIPS SLIDER - Premium styling */
+        .tips-container {
+            margin: 100px auto;
+            width: 70%;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tips-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #ffcc00;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tip-box {
+            font-size: 1.6rem;
+            border-radius: 20px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            animation: fadeIn 1s ease;
+            box-shadow: inset 0 0 20px rgba(255, 204, 0, 0.1);
+            font-weight: 400;
+            color: #e0e0e0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive Enhancements */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .cards {
+                gap: 30px;
+            }
+
+            .card {
+                width: 280px;
+            }
+
+            nav {
+                padding: 15px 20px;
+                flex-direction: column;
+                /* Stack nav on mobile */
+                gap: 10px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .profile-login {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="MICRO BG.mp4" type="video/mp4">
+    </video>
+
+    <!-- Background Image -->
+    <div class="overlay"></div>
+
+    <nav>
+        <div class="nav-links">
+            <a href="Home.html">Home</a>
+            <a href="CAL.html">Carbon Footprint Tracker</a>
+            <a href="tips.html">Tips to Go Green</a>
+
+            <a href="emission-stats.html">Emission Stats</a>
+
+            <a href="sdg.html">SDG</a>
+            <a href="about us.html">About Us</a>
+        </div>
+        <div class="profile-login">
+            <a href="login.html">Login</a> <!-- Link to login page -->
+            <div class="logged-in-nav" id="profileInfo">
+                <p>Welcome, <span id="userName">User</span>!</p>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Welcome to Go Green</h1>
+        <p>Empowering you to make sustainable choices. Track, learn, and act to reduce your carbon footprint.</p>
+        <button class="btn" onclick="window.location.href = 'CAL.html'">Start Tracking Your Carbon Footprint</button>
+    </div>
+
+    <!-- INTERACTIVE CARDS -->
+    <div class="cards">
+        <div class="card">
+            <h3>🌱 Eco Tips</h3>
+            <p>Daily tips to reduce waste and live sustainably.</p>
+        </div>
+
+        <div class="card">
+            <h3>📉 CO₂ Reduction</h3>
+            <p>Learn how small actions reduce large emissions.</p>
+        </div>
+
+        <div class="card">
+            <h3>🔋 Clean Energy</h3>
+            <p>Switch to solar, wind, and greener electricity.</p>
+        </div>
+    </div>
+
+    <!-- STATS SECTION -->
+    <div class="stats">
+        <h2>Global CO₂ Reduction This Year</h2>
+        <div class="counter" id="co2Counter">0</div>
+    </div>
+
+    <!-- TIPS SLIDER -->
+    <div class="tips-container">
+        <h2>🌍 Daily Green Tip</h2>
+        <div id="tipBox" class="tip-box">Loading tips...</div>
+    </div>
+
+    <script>
+        /* Animated number counter - Optimized for fewer updates */
+        let count = 0;
+        let target = 125000;
+
+        let counterInterval = setInterval(() => {
+            if (count < target) {
+                count += 1000; // Larger increment to finish faster
+                document.getElementById("co2Counter").innerText = count.toLocaleString() + " tons";
+            } else {
+                clearInterval(counterInterval);
+            }
+        }, 50); // Increased interval from 20ms to 50ms for less strain
+
+        /* Eco Tips Slider - Unchanged, as it's already efficient */
+        const tips = [
+            "Turn off lights when not in use 🌟",
+            "Use public transport to reduce CO₂ 🚆",
+            "Carry a reusable bottle ♻️",
+            "Plant a tree this weekend 🌳",
+            "Use LED bulbs to save energy 💡"
+        ];
+
+        let tipIndex = 0;
+        setInterval(() => {
+            tipIndex = (tipIndex + 1) % tips.length;
+            document.getElementById("tipBox").innerText = tips[tipIndex];
+        }, 3000);
+    </script>
+
+    <!-- Shows "Welcome, username!" and hides the Login button after login -->
+    <script src="user.js"></script>
+
+</body>
+
+</html>

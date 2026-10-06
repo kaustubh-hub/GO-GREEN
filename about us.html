@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ℹ️About Us</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet"> <!-- Premium Google Fonts -->
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3;
+        }
+
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            filter: brightness(0.8) contrast(1.1);
+            z-index: -3;
+        }
+
+        @media (max-width: 768px) or (prefers-reduced-motion: reduce) {
+            .bg-image {
+                background-attachment: scroll;
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+            z-index: -2;
+        }
+
+        nav {
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 50px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            position: relative;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-links a:hover {
+            color: #ffcc00;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 4px rgba(255, 204, 0, 0.5);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: linear-gradient(90deg, #ffcc00, #ffb400);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* PROFILE LOGIN IN NAV - Simplified to link and logged-in display */
+        .profile-login {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-login a,
+        .profile-login button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-login a:hover,
+        .profile-login button:hover {
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+        }
+
+        .logged-in-nav {
+            display: none;
+            text-align: center;
+        }
+
+        .logged-in-nav p {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            margin-top: 120px;
+            padding: 60px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffcc00;
+            margin-bottom: 30px;
+            text-shadow: 0 3px 6px rgba(255, 204, 0, 0.5);
+        }
+
+        .container p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #e0e0e0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .mission {
+            margin-bottom: 60px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.1), rgba(255, 127, 0, 0.1));
+            border-radius: 20px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+
+        .mission h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #ffcc00;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(255, 204, 0, 0.5);
+        }
+
+        .founders {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .founder {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .founder:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 204, 0, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .founder img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid #ffcc00;
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .founder img:hover {
+            transform: scale(1.1);
+        }
+
+        .founder h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #ffcc00;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(255, 204, 0, 0.5);
+        }
+
+        .founder p {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            line-height: 1.5;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .founder strong {
+            color: #ffcc00;
+        }
+
+        .founder .instagram {
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        .founder .instagram a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .founder .instagram a:hover {
+            text-decoration: underline;
+        }
+
+        .founder .gmail {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .founder .gmail a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .founder .gmail a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+                margin-top: 100px;
+            }
+
+            nav {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .profile-login {
+                margin-top: 10px;
+            }
+
+            .founders {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .container h1 {
+                font-size: 2.5rem;
+            }
+
+            .mission h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="MICRO bg.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <nav>
+        <div class="nav-links">
+            <a href="Home.html">Home</a>
+            <a href="CAL.html">Carbon Footprint Tracker</a>
+            <a href="tips.html">Tips to Go Green</a>
+
+            <a href="emission-stats.html">Emission Stats</a>
+
+            <a href="sdg.html">SDG</a>
+            <a href="about us.html">About Us</a>
+        </div>
+        <div class="profile-login">
+            <a href="login.html">Login</a> <!-- Link to login page -->
+            <div class="logged-in-nav" id="profileInfo">
+                <p>Welcome, <span id="userName">User</span>!</p>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>🌍 About Us - Go Green</h1>
+        <p>Go Green is a pioneering company dedicated to combating climate change through innovative technology and
+            sustainable practices. Our mission is to empower individuals and businesses to reduce their carbon
+            footprint, promote renewable energy, and protect our planet for future generations. Our team combines
+            technology and sustainability expertise to drive meaningful environmental impact.</p>
+
+        <div class="mission">
+            <h2>Our Mission</h2>
+            <p>To create a sustainable future by leveraging cutting-edge technology, fostering global partnerships, and
+                inspiring action against climate change. We believe in transparency, innovation, and collective
+                responsibility to preserve our planet.</p>
+        </div>
+
+        <div class="founders">
+            <div class="founder">
+                <img src="kaustubh.jpg" alt="Kaustubh">
+                <h3>Kaustubh</h3>
+                <p><strong>Owner & Developer</strong><br>Kaustubh is the owner and creator of Go Green.
+                    He leads the complete development of the website, including its user experience and core
+                    features such as the Carbon Footprint Tracker. His focus is on combining technology and
+                    sustainability to
+                    create digital solutions that help people understand and reduce their environmental impact.</p>
+                <div class="instagram"><strong>Instagram:</strong> <a href="https://instagram.com/kaustubh_gogreen"
+                        target="_blank">@kaustubhhh_26</a></div>
+                <div class="gmail"><strong>Gmail:</strong> <a
+                        href="mailto:kaustubh@gogreen.com">kaustubhmpbhor@gmail.com</a></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* Check for logged-in state on page load */
+        window.onload = function () {
+            const loggedIn = localStorage.getItem('loggedIn');
+            const userName = localStorage.getItem('userName');
+            if (loggedIn === 'true' && userName) {
+                document.getElementById('profileInfo').style.display = 'block';
+                document.getElementById('userName').innerText = userName;
+                document.querySelector('.profile-login a').style.display = 'none'; // Hide login link
+            }
+        };
+
+        /* Logout function */
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('userName');
+            location.reload(); // Refresh to show login link
+        }
+
+        // Add subtle animations on load
+        document.addEventListener('DOMContentLoaded', function () {
+            const founders = document.querySelectorAll('.founder');
+            founders.forEach((founder, index) => {
+                founder.style.animationDelay = `${index * 0.2}s`;
+                founder.style.animation = 'fadeInUp 0.8s ease-out forwards';
+            });
+        });
+    </script>
+
+    <script src="user.js"></script>
+
+</body>
+
+</html>
